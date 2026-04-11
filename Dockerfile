@@ -12,4 +12,4 @@ RUN npm ci --omit=dev
 COPY --from=build /app/dist ./dist
 COPY public ./public
 EXPOSE 3000
-CMD ["node", "dist/server.js"]
+CMD ["node", "--dns-result-order=ipv4first", "dist/server.js"]
