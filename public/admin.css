@@ -1,0 +1,368 @@
+.admin-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.admin-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-section {
+  max-width: 800px;
+  margin: 0 auto 32px;
+}
+
+.admin-section h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+}
+
+/* Stats bar */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 32px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.stat-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.stat-card .stat-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.stat-card .stat-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Category picker */
+.category-picker {
+  position: relative;
+  flex: 1;
+  min-width: 120px;
+}
+
+.category-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.category-chip {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  min-height: 32px;
+}
+
+.category-chip:hover {
+  border-color: var(--primary);
+  background: #eff6ff;
+}
+
+.category-chip.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+/* Add item form */
+.add-item-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.add-item-row .input {
+  min-width: 100px;
+  width: auto;
+}
+
+.add-item-row #new-name {
+  flex: 1;
+  max-width: 200px;
+}
+
+.add-item-row .input-price {
+  width: 90px;
+  flex: none;
+}
+
+.add-item-row .category-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Items table */
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.items-table th,
+.items-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.items-table th {
+  background: var(--bg);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.items-table tr:last-child td {
+  border-bottom: none;
+}
+
+.items-table .sold-out-toggle {
+  width: 48px;
+  height: 28px;
+  border-radius: 14px;
+  background: var(--border);
+  position: relative;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.items-table .sold-out-toggle.active {
+  background: var(--danger);
+}
+
+.items-table .sold-out-toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+}
+
+.items-table .sold-out-toggle.active::after {
+  transform: translateX(20px);
+}
+
+.table-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Admin actions */
+.admin-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Top sellers */
+.top-sellers {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.top-seller-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.top-seller-row:last-child {
+  border-bottom: none;
+}
+
+.top-seller-row .rank {
+  font-weight: 700;
+  color: var(--text-muted);
+  min-width: 28px;
+}
+
+.top-seller-row .name {
+  flex: 1;
+  font-weight: 600;
+}
+
+.top-seller-row .qty {
+  color: var(--text-muted);
+  margin-right: 12px;
+}
+
+.top-seller-row .rev {
+  font-weight: 600;
+  color: var(--success);
+}
+
+/* Order history */
+.order-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.history-card {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 14px 18px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.history-card .history-num {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--primary);
+  min-width: 60px;
+}
+
+.history-card .history-num.rush {
+  color: var(--danger);
+}
+
+.history-card .history-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.history-card .history-items {
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.history-card .history-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.history-card .history-total {
+  font-size: 16px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.history-card .status-done {
+  color: var(--success);
+}
+
+.history-card .status-pending {
+  color: var(--warning);
+}
+
+.history-empty {
+  text-align: center;
+  padding: 30px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* Edit modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 24px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal h3 {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.modal .form-group {
+  margin-bottom: 12px;
+}
+
+.modal .form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .add-item-row {
+    flex-wrap: wrap;
+  }
+  .add-item-row .input-price {
+    max-width: none;
+    flex: 1;
+  }
+}

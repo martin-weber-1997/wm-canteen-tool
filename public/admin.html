@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Canteen — Admin</title>
+  <link rel="stylesheet" href="/shared.css">
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <div class="header">
+      <h1>Admin</h1>
+      <button class="btn btn-outline btn-sm" id="logout-btn">Logout</button>
+    </div>
+
+    <div class="admin-body">
+      <!-- Stats -->
+      <div class="stats-bar" id="stats-bar">
+        <div class="stat-card"><div class="stat-value" id="stat-total">0</div><div class="stat-label">Total Orders</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-pending">0</div><div class="stat-label">Pending</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-done">0</div><div class="stat-label">Completed</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-revenue">0</div><div class="stat-label">Revenue</div></div>
+      </div>
+
+      <!-- Menu Items -->
+      <div class="admin-section">
+        <h2>Menu Items</h2>
+
+        <div class="add-item-row">
+          <input class="input" id="new-name" placeholder="Item name" />
+          <input class="input input-price" id="new-price" type="number" step="0.01" min="0" placeholder="Price" />
+          <input type="hidden" id="new-category" value="" />
+          <div class="category-chips" id="new-category-chips"></div>
+          <button class="btn btn-primary" id="add-item-btn">Add</button>
+        </div>
+
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th>Sold Out</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="items-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Top Sellers -->
+      <div class="admin-section">
+        <h2>Top Sellers</h2>
+        <div class="top-sellers" id="top-sellers">
+          <div class="top-seller-row"><span class="name" style="color:var(--text-muted)">No sales yet</span></div>
+        </div>
+      </div>
+
+      <!-- Order History -->
+      <div class="admin-section">
+        <h2>Order History</h2>
+        <div id="order-history"></div>
+      </div>
+
+      <!-- Admin Actions -->
+      <div class="admin-section">
+        <h2>Actions</h2>
+        <div class="admin-actions">
+          <button class="btn btn-danger" id="reset-btn">Reset Order Numbers</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit modal -->
+  <div class="modal-overlay" id="edit-modal">
+    <div class="modal">
+      <h3>Edit Item</h3>
+      <div class="form-group">
+        <label>Name</label>
+        <input class="input" id="edit-name" />
+      </div>
+      <div class="form-group">
+        <label>Price</label>
+        <input class="input" id="edit-price" type="number" step="0.01" min="0" />
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <input type="hidden" id="edit-category" />
+        <div class="category-chips" id="edit-category-chips"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="edit-cancel">Cancel</button>
+        <button class="btn btn-primary" id="edit-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/config.js"></script>
+  <script src="/admin.js"></script>
+</body>
+</html>

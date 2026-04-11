@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Canteen — Kitchen</title>
+  <link rel="stylesheet" href="/shared.css">
+  <link rel="stylesheet" href="/kitchen.css">
+</head>
+<body>
+  <div class="kitchen-layout">
+    <div class="header">
+      <h1>Kitchen</h1>
+      <div style="display:flex;gap:10px;align-items:center">
+        <button class="btn btn-outline btn-sm" id="toggle-done-btn" style="color:#f1f5f9;border-color:#475569">Hide Done</button>
+        <button class="btn btn-outline btn-sm" id="logout-btn" style="color:#f1f5f9;border-color:#475569">Logout</button>
+      </div>
+    </div>
+
+    <div class="kitchen-filter-bar" id="filter-bar"></div>
+
+    <div class="kitchen-body">
+      <div class="kitchen-col pending-col">
+        <div class="col-header">
+          Pending <span class="count-badge" id="pending-count">0</span>
+        </div>
+        <div class="col-body" id="pending-orders"></div>
+      </div>
+
+      <div class="kitchen-col done-col">
+        <div class="col-header">
+          Done <span class="count-badge" id="done-count">0</span>
+        </div>
+        <div class="col-body" id="done-orders"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/config.js"></script>
+  <script src="/kitchen.js"></script>
+</body>
+</html>

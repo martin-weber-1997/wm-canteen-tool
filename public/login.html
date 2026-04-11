@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Canteen — Login</title>
+  <link rel="stylesheet" href="/shared.css">
+  <link rel="stylesheet" href="/login.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-card">
+      <h1>Canteen</h1>
+      <p>Enter your PIN to continue</p>
+
+      <div class="pin-display">
+        <div class="pin-dot" id="dot-0"></div>
+        <div class="pin-dot" id="dot-1"></div>
+        <div class="pin-dot" id="dot-2"></div>
+        <div class="pin-dot" id="dot-3"></div>
+      </div>
+
+      <div class="numpad">
+        <button onclick="addDigit('1')">1</button>
+        <button onclick="addDigit('2')">2</button>
+        <button onclick="addDigit('3')">3</button>
+        <button onclick="addDigit('4')">4</button>
+        <button onclick="addDigit('5')">5</button>
+        <button onclick="addDigit('6')">6</button>
+        <button onclick="addDigit('7')">7</button>
+        <button onclick="addDigit('8')">8</button>
+        <button onclick="addDigit('9')">9</button>
+        <button class="empty"></button>
+        <button onclick="addDigit('0')">0</button>
+        <button class="backspace" onclick="removeDigit()">&#9003;</button>
+      </div>
+
+      <div class="login-error" id="error"></div>
+    </div>
+  </div>
+
+  <script src="/login.js"></script>
+</body>
+</html>

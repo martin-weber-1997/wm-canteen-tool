@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Canteen</title>
+  <link rel="stylesheet" href="/shared.css">
+  <style>
+    .landing {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    }
+
+    .landing h1 {
+      font-size: 32px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .landing p {
+      color: #94a3b8;
+      margin-bottom: 40px;
+      font-size: 16px;
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .role-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 36px 24px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.15s, box-shadow 0.15s;
+      min-height: 160px;
+    }
+
+    .role-card:active {
+      transform: scale(0.97);
+    }
+
+    .role-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      transform: translateY(-2px);
+    }
+
+    .role-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .role-card .role-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .role-card .role-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="landing">
+    <h1>Canteen</h1>
+    <p>Select your station</p>
+
+    <div class="role-grid">
+      <a class="role-card" href="/order">
+        <div class="role-icon">&#x1F4CB;</div>
+        <div class="role-name">Order</div>
+        <div class="role-desc">Take customer orders</div>
+      </a>
+
+      <a class="role-card" href="/kitchen">
+        <div class="role-icon">&#x1F373;</div>
+        <div class="role-name">Kitchen</div>
+        <div class="role-desc">View and complete orders</div>
+      </a>
+
+      <a class="role-card" href="/admin">
+        <div class="role-icon">&#x2699;&#xFE0F;</div>
+        <div class="role-name">Admin</div>
+        <div class="role-desc">Manage menu and settings</div>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

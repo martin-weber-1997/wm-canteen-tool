@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Canteen — Order</title>
+  <link rel="stylesheet" href="/shared.css">
+  <link rel="stylesheet" href="/order.css">
+</head>
+<body>
+  <div class="order-layout">
+    <div class="header">
+      <h1>Order</h1>
+      <button class="btn btn-outline btn-sm" id="logout-btn">Logout</button>
+    </div>
+
+    <div class="category-bar" id="category-bar"></div>
+
+    <div class="order-body">
+      <div class="item-grid-wrapper">
+        <div class="item-grid" id="item-grid"></div>
+      </div>
+
+      <div class="order-sidebar">
+        <div class="order-sidebar-header">Current Order</div>
+        <div class="order-sidebar-items" id="order-lines"></div>
+        <div class="order-sidebar-footer">
+          <div class="order-total">
+            <span>Total</span>
+            <span id="order-total"></span>
+          </div>
+          <label class="rush-toggle">
+            <input type="checkbox" id="rush-check" />
+            <span class="rush-label">Rush</span>
+          </label>
+          <button class="submit-btn" id="submit-btn" disabled>Submit Order</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="order-confirmation" id="confirmation">
+    <div class="confirmation-card">
+      <div class="order-label">Order Number</div>
+      <div class="order-num" id="confirmation-number"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/config.js"></script>
+  <script src="/order.js"></script>
+</body>
+</html>
