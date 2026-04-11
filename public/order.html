@@ -6,12 +6,24 @@
   <title>Canteen — Order</title>
   <link rel="stylesheet" href="/shared.css">
   <link rel="stylesheet" href="/order.css">
+  <script src="/theme.js"></script>
 </head>
 <body>
   <div class="order-layout">
     <div class="header">
       <h1>Order</h1>
-      <button class="btn btn-outline btn-sm" id="logout-btn">Logout</button>
+      <div style="display:flex;gap:10px;align-items:center">
+        <div class="nav-switcher">
+          <button class="btn btn-outline btn-sm nav-switcher-toggle" id="nav-toggle">Switch View</button>
+          <div class="nav-switcher-menu" id="nav-menu">
+            <a href="/order" class="active">Order</a>
+            <a href="/kitchen">Kitchen</a>
+            <a href="/admin">Admin</a>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm" id="theme-toggle">Dark</button>
+        <button class="btn btn-outline btn-sm" id="logout-btn">Logout</button>
+      </div>
     </div>
 
     <div class="category-bar" id="category-bar"></div>

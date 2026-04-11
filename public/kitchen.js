@@ -1,3 +1,11 @@
+// Nav switcher
+document.getElementById('nav-toggle').addEventListener('click', () => {
+  document.getElementById('nav-menu').classList.toggle('open');
+});
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.nav-switcher')) document.getElementById('nav-menu').classList.remove('open');
+});
+
 const socket = io();
 
 let pendingOrders = [];

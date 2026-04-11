@@ -6,14 +6,24 @@
   <title>Canteen — Kitchen</title>
   <link rel="stylesheet" href="/shared.css">
   <link rel="stylesheet" href="/kitchen.css">
+  <script src="/theme.js"></script>
 </head>
 <body>
   <div class="kitchen-layout">
     <div class="header">
       <h1>Kitchen</h1>
       <div style="display:flex;gap:10px;align-items:center">
-        <button class="btn btn-outline btn-sm" id="toggle-done-btn" style="color:#f1f5f9;border-color:#475569">Hide Done</button>
-        <button class="btn btn-outline btn-sm" id="logout-btn" style="color:#f1f5f9;border-color:#475569">Logout</button>
+        <div class="nav-switcher">
+          <button class="btn btn-outline btn-sm nav-switcher-toggle" id="nav-toggle">Switch View</button>
+          <div class="nav-switcher-menu" id="nav-menu">
+            <a href="/order">Order</a>
+            <a href="/kitchen" class="active">Kitchen</a>
+            <a href="/admin">Admin</a>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm" id="theme-toggle">Dark</button>
+        <button class="btn btn-outline btn-sm" id="toggle-done-btn">Hide Done</button>
+        <button class="btn btn-outline btn-sm" id="logout-btn">Logout</button>
       </div>
     </div>
 

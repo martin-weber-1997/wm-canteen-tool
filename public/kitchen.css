@@ -2,22 +2,22 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  background: #0f172a;
-  color: #f1f5f9;
+  background: var(--bg);
+  color: var(--text);
 }
 
 .kitchen-layout .header {
-  background: #1e293b;
-  border-bottom: 1px solid #334155;
-  color: #f1f5f9;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
 }
 
 .kitchen-filter-bar {
   display: flex;
   gap: 8px;
   padding: 10px 16px;
-  background: #1e293b;
-  border-bottom: 1px solid #334155;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
   overflow-x: auto;
   flex-shrink: 0;
 }
@@ -27,8 +27,8 @@
   border-radius: 999px;
   font-size: 14px;
   font-weight: 600;
-  background: #334155;
-  color: #94a3b8;
+  background: var(--border);
+  color: var(--text-muted);
   white-space: nowrap;
   transition: background 0.15s, color 0.15s;
   min-height: 40px;
@@ -55,15 +55,15 @@
 }
 
 .kitchen-col + .kitchen-col {
-  border-left: 1px solid #334155;
+  border-left: 1px solid var(--border);
 }
 
 .col-header {
   padding: 14px 20px;
   font-size: 16px;
   font-weight: 700;
-  background: #1e293b;
-  border-bottom: 1px solid #334155;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -104,10 +104,10 @@
 
 /* Order cards */
 .order-card {
-  background: #1e293b;
+  background: var(--surface);
   border-radius: var(--radius);
   padding: 16px 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  box-shadow: var(--shadow-lg);
   animation: slideIn 0.3s ease;
 }
 
@@ -117,14 +117,13 @@
 }
 
 .order-card.rush {
-  border: 2px solid #dc2626;
-  background: #1c1517;
+  border: 2px solid var(--danger);
 }
 
 .rush-badge {
   font-size: 14px;
   font-weight: 800;
-  color: #dc2626;
+  color: var(--danger);
   letter-spacing: 1px;
 }
 
@@ -148,7 +147,7 @@
 
 .order-card .order-time {
   font-size: 13px;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 .order-card .order-items-list {
@@ -162,7 +161,7 @@
   justify-content: space-between;
   padding: 4px 0;
   font-size: 16px;
-  border-bottom: 1px solid #334155;
+  border-bottom: 1px solid var(--border);
 }
 
 .order-card .order-items-list li:last-child {
@@ -171,7 +170,7 @@
 
 .order-card .order-items-list .qty {
   font-weight: 700;
-  color: #f1f5f9;
+  color: var(--text);
   margin-right: 8px;
   min-width: 24px;
 }
@@ -194,7 +193,7 @@
 
 .empty-col {
   text-align: center;
-  color: #64748b;
+  color: var(--text-muted);
   font-size: 15px;
   padding: 40px 20px;
 }
@@ -252,7 +251,7 @@
 
   .kitchen-col + .kitchen-col {
     border-left: none;
-    border-top: 1px solid #334155;
+    border-top: 1px solid var(--border);
   }
 
   .done-col {

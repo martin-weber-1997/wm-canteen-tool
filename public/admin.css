@@ -84,7 +84,6 @@
 
 .category-chip:hover {
   border-color: var(--primary);
-  background: #eff6ff;
 }
 
 .category-chip.active {
