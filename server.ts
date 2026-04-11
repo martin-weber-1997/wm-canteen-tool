@@ -336,7 +336,7 @@ function serveView(role: Role, file: string): RequestHandler {
   return (req, res) => {
     const session = getSession(req);
     if (!session.role || (session.role !== role && session.role !== 'admin')) {
-      res.sendFile(path.join(PROJECT_ROOT, 'public', 'login.html'));
+      res.redirect(`/login.html?redirect=${req.path}`);
       return;
     }
     res.sendFile(path.join(PROJECT_ROOT, 'public', file));

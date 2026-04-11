@@ -45,9 +45,10 @@ async function submit() {
       return;
     }
 
-    // Redirect based on role
+    // Redirect to intended page or role default
+    const intended = new URLSearchParams(window.location.search).get('redirect');
     const routes = { order: '/order', kitchen: '/kitchen', admin: '/admin' };
-    window.location.href = routes[data.role] || '/';
+    window.location.href = intended || routes[data.role] || '/';
   } catch (err) {
     errorEl.textContent = 'Connection error';
     pin = '';
@@ -61,8 +62,14 @@ document.addEventListener('keydown', (e) => {
   else if (e.key === 'Backspace') removeDigit();
 });
 
-// Check if already logged in
+// Check if already logged in — but not if we were sent here to re-auth
 (async () => {
+  const redirect = new URLSearchParams(window.location.search).get('redirect');
+  if (redirect) {
+    const backBtn = document.getElementById('back-btn');
+    if (backBtn) backBtn.style.display = '';
+    return;
+  }
   try {
     const res = await fetch('/api/auth/me');
     if (res.ok) {
