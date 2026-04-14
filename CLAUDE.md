@@ -27,8 +27,17 @@ Single-file Express + Socket.IO server (`server.ts`) with vanilla HTML/CSS/JS fr
 
 - Separate HTML/JS/CSS per view: `login`, `order`, `kitchen`, `admin`, plus shared `index.html` (landing redirect).
 - `config.js` fetches `/api/config` for locale/currency formatting — imported by other pages.
+- `theme.js` handles dark/light mode toggle, persisted in `localStorage`. All views use CSS variables from `shared.css`; the `[data-theme="dark"]` selector overrides them.
 - Each view connects its own Socket.IO client for realtime updates.
 - No build step, no bundler, no framework — plain browser JS with `fetch()` and DOM manipulation.
+- Login page supports `?redirect=` query param for re-auth flows (e.g. switching to a higher-privilege view).
+
+### Deployment
+
+- **Render** via `render.yaml` + `Dockerfile` — auto-deploys on push to `main`.
+- **Supabase** for PostgreSQL — must use the **Session Pooler** connection string (IPv4-compatible). Direct connections require paid IPv4 add-on.
+- `Dockerfile` includes `--dns-result-order=ipv4first` and `gai.conf` to force IPv4 resolution.
+- Dependabot configured for npm and Docker updates (`.github/dependabot.yml`).
 
 ### Environment Variables
 

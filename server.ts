@@ -59,8 +59,12 @@ async function initDb(): Promise<void> {
     category TEXT NOT NULL DEFAULT 'Uncategorized',
     sold_out BOOLEAN NOT NULL DEFAULT false,
     sort_order INTEGER NOT NULL DEFAULT 0,
+    archived BOOLEAN NOT NULL DEFAULT false,
     created_at TIMESTAMPTZ DEFAULT NOW()
   )`);
+
+  // Add archived column if missing (migration for existing databases)
+  await pool.query(`ALTER TABLE items ADD COLUMN IF NOT EXISTS archived BOOLEAN NOT NULL DEFAULT false`);
 
   await pool.query(`CREATE TABLE IF NOT EXISTS orders (
     id SERIAL PRIMARY KEY,
@@ -180,8 +184,12 @@ app.get('/api/auth/me', ((req, res) => {
 }) as RequestHandler);
 
 // --- Item routes ---
-app.get('/api/items', requireRole('order', 'kitchen', 'admin'), (async (_req, res) => {
-  const items = await query("SELECT * FROM items ORDER BY sort_order, id");
+app.get('/api/items', requireRole('order', 'kitchen', 'admin'), (async (req, res) => {
+  const includeArchived = req.query.include_archived === '1';
+  const sql = includeArchived
+    ? "SELECT * FROM items ORDER BY archived, sort_order, id"
+    : "SELECT * FROM items WHERE archived = false ORDER BY sort_order, id";
+  const items = await query(sql);
   res.json(items);
 }) as RequestHandler);
 
@@ -226,9 +234,22 @@ app.put('/api/items/:id', requireRole('admin'), (async (req, res) => {
 
 app.delete('/api/items/:id', requireRole('admin'), (async (req, res) => {
   const id = Number(req.params.id);
-  await pool.query("DELETE FROM items WHERE id = $1", [id]);
-  io.emit('item-deleted', { itemId: id });
+  const rows = await query(
+    "UPDATE items SET archived = true WHERE id = $1 RETURNING *", [id]
+  );
+  if (!rows.length) { res.status(404).json({ error: 'Item not found' }); return; }
+  io.emit('item-updated', rows[0]);
   res.json({ ok: true });
+}) as RequestHandler);
+
+app.post('/api/items/:id/restore', requireRole('admin'), (async (req, res) => {
+  const id = Number(req.params.id);
+  const rows = await query(
+    "UPDATE items SET archived = false WHERE id = $1 RETURNING *", [id]
+  );
+  if (!rows.length) { res.status(404).json({ error: 'Item not found' }); return; }
+  io.emit('item-updated', rows[0]);
+  res.json(rows[0]);
 }) as RequestHandler);
 
 // --- Order routes ---

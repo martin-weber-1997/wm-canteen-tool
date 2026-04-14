@@ -175,19 +175,17 @@ function showConfirmation(num) {
 
 // --- Socket events ---
 socket.on('item-updated', (item) => {
-  const idx = menuItems.findIndex(i => i.id === item.id);
-  if (idx >= 0) menuItems[idx] = item;
-  else menuItems.push(item);
+  if (item.archived) {
+    menuItems = menuItems.filter(i => i.id !== item.id);
+    delete currentOrder[item.id];
+    renderOrderSummary();
+  } else {
+    const idx = menuItems.findIndex(i => i.id === item.id);
+    if (idx >= 0) menuItems[idx] = item;
+    else menuItems.push(item);
+  }
   renderCategories();
   renderItems();
-});
-
-socket.on('item-deleted', ({ itemId }) => {
-  menuItems = menuItems.filter(i => i.id !== itemId);
-  delete currentOrder[itemId];
-  renderCategories();
-  renderItems();
-  renderOrderSummary();
 });
 
 // --- Logout ---

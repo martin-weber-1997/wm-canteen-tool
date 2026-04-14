@@ -17,7 +17,7 @@ const editModal = document.getElementById('edit-modal');
 
 async function init() {
   await loadConfig();
-  const res = await fetch('/api/items');
+  const res = await fetch('/api/items?include_archived=1');
   if (res.status === 401) { window.location.href = '/'; return; }
   items = await res.json();
   renderItems();
@@ -52,17 +52,20 @@ function renderItems() {
   renderCategoryChips(document.getElementById('new-category-chips'), document.getElementById('new-category'));
 
   itemsBody.innerHTML = items.map(item => `
-    <tr>
-      <td>${esc(item.name)}</td>
+    <tr class="${item.archived ? 'archived-row' : ''}">
+      <td>${esc(item.name)}${item.archived ? ' <span class="badge-archived">Archived</span>' : ''}</td>
       <td>${formatPrice(item.price)}</td>
       <td>${esc(item.category)}</td>
       <td>
-        <div class="sold-out-toggle ${item.sold_out ? 'active' : ''}" data-id="${item.id}" data-action="toggle-sold-out"></div>
+        <div class="sold-out-toggle ${item.sold_out ? 'active' : ''} ${item.archived ? 'disabled' : ''}" data-id="${item.id}" data-action="toggle-sold-out"></div>
       </td>
       <td>
         <div class="table-actions">
-          <button class="btn btn-outline btn-sm" data-id="${item.id}" data-action="edit">Edit</button>
-          <button class="btn btn-danger btn-sm" data-id="${item.id}" data-action="delete">Delete</button>
+          ${item.archived
+            ? `<button class="btn btn-outline btn-sm" data-id="${item.id}" data-action="restore">Restore</button>`
+            : `<button class="btn btn-outline btn-sm" data-id="${item.id}" data-action="edit">Edit</button>
+               <button class="btn btn-danger btn-sm" data-id="${item.id}" data-action="archive">Archive</button>`
+          }
         </div>
       </td>
     </tr>
@@ -70,13 +73,18 @@ function renderItems() {
 
   // Bind events
   itemsBody.querySelectorAll('[data-action="toggle-sold-out"]').forEach(el => {
-    el.addEventListener('click', () => toggleSoldOut(Number(el.dataset.id)));
+    if (!el.classList.contains('disabled')) {
+      el.addEventListener('click', () => toggleSoldOut(Number(el.dataset.id)));
+    }
   });
   itemsBody.querySelectorAll('[data-action="edit"]').forEach(btn => {
     btn.addEventListener('click', () => openEdit(Number(btn.dataset.id)));
   });
-  itemsBody.querySelectorAll('[data-action="delete"]').forEach(btn => {
-    btn.addEventListener('click', () => deleteItem(Number(btn.dataset.id)));
+  itemsBody.querySelectorAll('[data-action="archive"]').forEach(btn => {
+    btn.addEventListener('click', () => archiveItem(Number(btn.dataset.id)));
+  });
+  itemsBody.querySelectorAll('[data-action="restore"]').forEach(btn => {
+    btn.addEventListener('click', () => restoreItem(Number(btn.dataset.id)));
   });
 }
 
@@ -161,12 +169,18 @@ document.getElementById('edit-save').addEventListener('click', async () => {
   }
 });
 
-// --- Delete item ---
-async function deleteItem(id) {
-  if (!confirm('Delete this item?')) return;
+// --- Archive / Restore item ---
+async function archiveItem(id) {
+  if (!confirm('Archive this item? It will be hidden from the order menu.')) return;
   const res = await fetch(`/api/items/${id}`, { method: 'DELETE' });
-  if (res.ok) showToast('Item deleted');
-  else showToast('Failed to delete');
+  if (res.ok) showToast('Item archived');
+  else showToast('Failed to archive');
+}
+
+async function restoreItem(id) {
+  const res = await fetch(`/api/items/${id}/restore`, { method: 'POST' });
+  if (res.ok) showToast('Item restored');
+  else showToast('Failed to restore');
 }
 
 // --- Reset order numbers ---
@@ -243,11 +257,6 @@ socket.on('item-updated', (item) => {
   const idx = items.findIndex(i => i.id === item.id);
   if (idx >= 0) items[idx] = item;
   else items.push(item);
-  renderItems();
-});
-
-socket.on('item-deleted', ({ itemId }) => {
-  items = items.filter(i => i.id !== itemId);
   renderItems();
 });
 
