@@ -188,6 +188,16 @@ socket.on('item-updated', (item) => {
   renderItems();
 });
 
+socket.on('item-deleted', ({ id }) => {
+  menuItems = menuItems.filter(i => i.id !== id);
+  if (currentOrder[id]) {
+    delete currentOrder[id];
+    renderOrderSummary();
+  }
+  renderCategories();
+  renderItems();
+});
+
 // --- Logout ---
 document.getElementById('logout-btn').addEventListener('click', async () => {
   await fetch('/api/auth/logout', { method: 'POST' });

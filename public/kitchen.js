@@ -163,6 +163,29 @@ async function markDone(orderId) {
 }
 
 // --- Socket events ---
+function syncFilterAfterMenuChange() {
+  const cats = new Set(menuItems.map(i => i.category));
+  if (activeFilter !== 'All' && !cats.has(activeFilter)) activeFilter = 'All';
+  renderFilterBar();
+  render();
+}
+
+socket.on('item-updated', (item) => {
+  if (item.archived) {
+    menuItems = menuItems.filter(i => i.id !== item.id);
+  } else {
+    const idx = menuItems.findIndex(i => i.id === item.id);
+    if (idx >= 0) menuItems[idx] = item;
+    else menuItems.push(item);
+  }
+  syncFilterAfterMenuChange();
+});
+
+socket.on('item-deleted', ({ id }) => {
+  menuItems = menuItems.filter(i => i.id !== id);
+  syncFilterAfterMenuChange();
+});
+
 socket.on('new-order', (order) => {
   pendingOrders.push(order);
   render();
