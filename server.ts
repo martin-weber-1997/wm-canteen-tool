@@ -95,28 +95,6 @@ async function initDb(): Promise<void> {
     await pool.query("INSERT INTO meta (key, value) VALUES ('order_counter', '0')");
   }
 
-  // Seed example items if empty
-  const countResult = await queryOne<{ count: string }>("SELECT COUNT(*) as count FROM items");
-  if (countResult && parseInt(countResult.count) === 0) {
-    const seeds: [string, number, string, number][] = [
-      ['Cheeseburger', 8.5, 'Food', 1],
-      ['Hot Dog', 5.0, 'Food', 2],
-      ['Fries', 4.0, 'Food', 3],
-      ['Caesar Salad', 7.0, 'Food', 4],
-      ['Cola', 3.0, 'Drinks', 5],
-      ['Lemonade', 3.5, 'Drinks', 6],
-      ['Water', 2.0, 'Drinks', 7],
-      ['Coffee', 3.0, 'Drinks', 8],
-      ['Brownie', 4.0, 'Desserts', 9],
-      ['Ice Cream', 3.5, 'Desserts', 10],
-    ];
-    for (const [name, price, category, sort] of seeds) {
-      await pool.query(
-        "INSERT INTO items (name, price, category, sort_order) VALUES ($1, $2, $3, $4)",
-        [name, price, category, sort]
-      );
-    }
-  }
 }
 
 // --- Socket.IO ---
