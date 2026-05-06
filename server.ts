@@ -252,6 +252,27 @@ app.post('/api/items/:id/restore', requireRole('admin'), (async (req, res) => {
   res.json(rows[0]);
 }) as RequestHandler);
 
+app.delete('/api/items/:id/permanent', requireRole('admin'), (async (req, res) => {
+  const id = Number(req.params.id);
+  const item = await queryOne<{ id: number; name: string }>("SELECT * FROM items WHERE id = $1", [id]);
+  if (!item) { res.status(404).json({ error: 'Item not found' }); return; }
+
+  const ref = await queryOne<{ count: string }>(
+    "SELECT COUNT(*) as count FROM order_items WHERE item_id = $1", [id]
+  );
+  const refCount = parseInt(ref?.count ?? '0');
+  if (refCount > 0) {
+    res.status(409).json({
+      error: `Can't delete "${item.name}" — it appears in ${refCount} order${refCount === 1 ? '' : 's'}. Clear order history first, or archive the item instead.`,
+    });
+    return;
+  }
+
+  await pool.query("DELETE FROM items WHERE id = $1", [id]);
+  io.emit('item-deleted', { id });
+  res.json({ ok: true });
+}) as RequestHandler);
+
 // --- Order routes ---
 app.post('/api/orders', requireRole('order', 'admin'), (async (req, res) => {
   const { items, rush } = req.body as { items: { itemId: number; quantity: number }[]; rush?: boolean };
@@ -328,6 +349,14 @@ app.put('/api/orders/:id/done', requireRole('kitchen', 'admin'), (async (req, re
 // --- Admin actions ---
 app.post('/api/reset-order-numbers', requireRole('admin'), (async (_req, res) => {
   await pool.query("UPDATE meta SET value = '0' WHERE key = 'order_counter'");
+  res.json({ ok: true });
+}) as RequestHandler);
+
+app.post('/api/clear-history', requireRole('admin'), (async (_req, res) => {
+  await pool.query("DELETE FROM order_items");
+  await pool.query("DELETE FROM orders");
+  await pool.query("UPDATE meta SET value = '0' WHERE key = 'order_counter'");
+  io.emit('history-cleared');
   res.json({ ok: true });
 }) as RequestHandler);
 

@@ -356,6 +356,29 @@
   margin-top: 20px;
 }
 
+.modal-text {
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.modal-error {
+  display: none;
+  font-size: 13px;
+  color: var(--danger);
+  background: color-mix(in srgb, var(--danger) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--danger) 40%, transparent);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+.modal-error.show {
+  display: block;
+}
+
 @media (max-width: 768px) {
   .add-item-row {
     flex-wrap: wrap;

@@ -81,7 +81,21 @@
         <h2>Actions</h2>
         <div class="admin-actions">
           <button class="btn btn-danger" id="reset-btn">Reset Order Numbers</button>
+          <button class="btn btn-danger" id="clear-history-btn">Clear Order History</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete confirm modal -->
+  <div class="modal-overlay" id="delete-modal">
+    <div class="modal">
+      <h3>Delete item?</h3>
+      <p id="delete-msg" class="modal-text">This permanently removes <strong id="delete-name"></strong>. This cannot be undone.</p>
+      <div class="modal-error" id="delete-error"></div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" id="delete-cancel">Cancel</button>
+        <button class="btn btn-danger" id="delete-confirm">Delete</button>
       </div>
     </div>
   </div>

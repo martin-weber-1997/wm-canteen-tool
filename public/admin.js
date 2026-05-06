@@ -10,10 +10,14 @@ const socket = io();
 
 let items = [];
 let editingId = null;
+let deletingId = null;
 
 const itemsBody = document.getElementById('items-body');
 const toastEl = document.getElementById('toast');
 const editModal = document.getElementById('edit-modal');
+const deleteModal = document.getElementById('delete-modal');
+const deleteNameEl = document.getElementById('delete-name');
+const deleteErrorEl = document.getElementById('delete-error');
 
 async function init() {
   await loadConfig();
@@ -62,9 +66,11 @@ function renderItems() {
       <td>
         <div class="table-actions">
           ${item.archived
-            ? `<button class="btn btn-outline btn-sm" data-id="${item.id}" data-action="restore">Restore</button>`
+            ? `<button class="btn btn-outline btn-sm" data-id="${item.id}" data-action="restore">Restore</button>
+               <button class="btn btn-danger btn-sm" data-id="${item.id}" data-action="delete">Delete</button>`
             : `<button class="btn btn-outline btn-sm" data-id="${item.id}" data-action="edit">Edit</button>
-               <button class="btn btn-danger btn-sm" data-id="${item.id}" data-action="archive">Archive</button>`
+               <button class="btn btn-outline btn-sm" data-id="${item.id}" data-action="archive">Archive</button>
+               <button class="btn btn-danger btn-sm" data-id="${item.id}" data-action="delete">Delete</button>`
           }
         </div>
       </td>
@@ -85,6 +91,9 @@ function renderItems() {
   });
   itemsBody.querySelectorAll('[data-action="restore"]').forEach(btn => {
     btn.addEventListener('click', () => restoreItem(Number(btn.dataset.id)));
+  });
+  itemsBody.querySelectorAll('[data-action="delete"]').forEach(btn => {
+    btn.addEventListener('click', () => openDelete(Number(btn.dataset.id)));
   });
 }
 
@@ -183,12 +192,57 @@ async function restoreItem(id) {
   else showToast('Failed to restore');
 }
 
+// --- Delete item (permanent) ---
+function openDelete(id) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  deletingId = id;
+  deleteNameEl.textContent = item.name;
+  deleteErrorEl.classList.remove('show');
+  deleteErrorEl.textContent = '';
+  deleteModal.classList.add('show');
+}
+
+function closeDelete() {
+  deleteModal.classList.remove('show');
+  deletingId = null;
+}
+
+document.getElementById('delete-cancel').addEventListener('click', closeDelete);
+
+document.getElementById('delete-confirm').addEventListener('click', async () => {
+  if (!deletingId) return;
+  const res = await fetch(`/api/items/${deletingId}/permanent`, { method: 'DELETE' });
+  if (res.ok) {
+    closeDelete();
+    showToast('Item deleted');
+  } else {
+    let msg = 'Failed to delete item';
+    try { const data = await res.json(); if (data?.error) msg = data.error; } catch {}
+    deleteErrorEl.textContent = msg;
+    deleteErrorEl.classList.add('show');
+  }
+});
+
 // --- Reset order numbers ---
 document.getElementById('reset-btn').addEventListener('click', async () => {
   if (!confirm('Reset order numbers to 1?')) return;
   const res = await fetch('/api/reset-order-numbers', { method: 'POST' });
   if (res.ok) showToast('Order numbers reset');
   else showToast('Failed to reset');
+});
+
+// --- Clear order history ---
+document.getElementById('clear-history-btn').addEventListener('click', async () => {
+  if (!confirm('Delete all orders and reset order numbers to 0? This cannot be undone.')) return;
+  const res = await fetch('/api/clear-history', { method: 'POST' });
+  if (res.ok) {
+    showToast('Order history cleared');
+    loadStats();
+    loadOrders();
+  } else {
+    showToast('Failed to clear history');
+  }
 });
 
 // --- Stats ---
@@ -260,8 +314,14 @@ socket.on('item-updated', (item) => {
   renderItems();
 });
 
+socket.on('item-deleted', ({ id }) => {
+  items = items.filter(i => i.id !== id);
+  renderItems();
+});
+
 socket.on('new-order', () => { loadStats(); loadOrders(); });
 socket.on('order-done', () => { loadStats(); loadOrders(); });
+socket.on('history-cleared', () => { loadStats(); loadOrders(); });
 
 // --- Logout ---
 document.getElementById('logout-btn').addEventListener('click', async () => {

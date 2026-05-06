@@ -170,6 +170,12 @@ socket.on('new-order', (order) => {
   if (filterOrders([order]).length > 0) playChime();
 });
 
+socket.on('history-cleared', () => {
+  pendingOrders = [];
+  doneOrders = [];
+  render();
+});
+
 socket.on('order-done', ({ orderId, completedAt }) => {
   const idx = pendingOrders.findIndex(o => o.id === orderId);
   if (idx >= 0) {
