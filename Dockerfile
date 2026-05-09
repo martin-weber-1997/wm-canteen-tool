@@ -1,11 +1,11 @@
-FROM node:20-alpine AS build
+FROM node:26-alpine AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY tsconfig.json server.ts ./
 RUN npm run build
 
-FROM node:20-alpine
+FROM node:26-alpine
 RUN echo 'precedence ::ffff:0:0/96 100' >> /etc/gai.conf
 WORKDIR /app
 COPY package.json package-lock.json ./
